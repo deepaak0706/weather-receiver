@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Weather Dashboard</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial; background: #667eea; color: white; padding: 20px; text-align: center; }
+    h1 { margin-top: 50px; }
+    .status { background: white; color: black; padding: 20px; border-radius: 10px; margin: 20px auto; max-width: 600px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; max-width: 1000px; margin: 20px auto; }
+    .card { background: white; color: black; padding: 15px; border-radius: 10px; }
+    .card h3 { color: #667eea; font-size: 0.8em; margin: 0; }
+    .card .val { font-size: 1.8em; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>🌤️ Weather Station</h1>
+  <div class="status">
+    <h2 id="status">⏳ Waiting for data...</h2>
+  </div>
+  <div class="cards" id="cards"></div>
+  
+  <script>
+    async function update() {
+      try {
+        const res = await fetch('/api/handler.js');
+        const data = await res.json();
+        
+        if (data.latestData) {
+          document.getElementById('status').textContent = '✅ Receiving Data!';
+          const d = data.latestData;
+          document.getElementById('cards').innerHTML = `
+            <div class="card"><h3>🌡️ Temp</h3><div class="val">${d.tempf || 'N/A'}°F</div></div>
+            <div class="card"><h3>💧 Humidity</h3><div class="val">${d.humidity || 'N/A'}%</div></div>
+            <div class="card"><h3>🌬️ Wind</h3><div class="val">${d.windspeedmph || 'N/A'} mph</div></div>
+            <div class="card"><h3>🌧️ Rain</h3><div class="val">${d.rainratein || 'N/A'}</div></div>
+          `;
+        }
+      } catch(e) {
+        console.log('Loading...');
+      }
+    }
+    
+    update();
+    setInterval(update, 5000);
+  </script>
+</body>
+</html>
