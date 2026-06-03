@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/data/report", "destination": "/api/handler.js" },
+    { "source": "/(.*)", "destination": "/public/$1" }
+  ]
+}
