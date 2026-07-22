@@ -12,22 +12,20 @@ export default function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Content-Type', 'text/plain');
   
-  console.log('🔍 Full URL:', req.url);
-  console.log('📍 Path:', req.path);
-  console.log('🔗 Query params:', JSON.stringify(req.query));
+  console.log('🔍 FULL REQUEST DEBUG:');
+  console.log('Method:', req.method);
+  console.log('URL:', req.url);
+  console.log('Path:', req.path);
+  console.log('Query:', JSON.stringify(req.query));
+  console.log('Raw headers:', JSON.stringify(req.headers));
   
   if (req.method === 'GET') {
-    // Log raw params
-    console.log('All query keys:', Object.keys(req.query));
-    
     latestData = {
       timestamp: new Date().toISOString(),
-      stationID: req.query.ID || req.query.id,
-      password: req.query.PASSWORD || req.query.password,
-      temperature: parseFloat(req.query.tempf),
-      humidity: parseInt(req.query.humidity),
-      windSpeed: parseFloat(req.query.windspeedmph),
-      rainfall: parseFloat(req.query.dailyrainin),
+      stationID: req.query.ID,
+      password: req.query.PASSWORD,
+      tempf: req.query.tempf,
+      humidity: req.query.humidity,
       raw: req.query
     };
     
