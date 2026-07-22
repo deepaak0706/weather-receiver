@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/weatherstation/updateweatherstation.php", "destination": "/api/handler.js" },
+    { "source": "/weatherstation/(.*)", "destination": "/api/handler.js" },
     { "source": "/(.*)", "destination": "/public/$1" }
   ]
 }
