@@ -12,16 +12,20 @@ export default function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Content-Type', 'text/plain');
   
-  console.log('🔍 FULL REQUEST DEBUG:');
-  console.log('Method:', req.method);
-  console.log('URL:', req.url);
-  console.log('Path:', req.path);
-  console.log('Query:', JSON.stringify(req.query));
-  console.log('Raw headers:', JSON.stringify(req.headers));
+  // Log the EXACT URL being requested
+  const fullUrl = `${req.url}`;
+  console.log('📡 EXACT URL RECEIVED:', fullUrl);
+  console.log('Query params:', JSON.stringify(req.query));
+  console.log('Query keys:', Object.keys(req.query));
   
   if (req.method === 'GET') {
+    if (Object.keys(req.query).length === 0) {
+      console.log('⚠️ WARNING: No query parameters! App is only testing connectivity');
+    }
+    
     latestData = {
       timestamp: new Date().toISOString(),
+      url: fullUrl,
       stationID: req.query.ID,
       password: req.query.PASSWORD,
       tempf: req.query.tempf,
