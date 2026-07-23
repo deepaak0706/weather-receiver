@@ -1,7 +1,5 @@
 {
   "rewrites": [
-    { "source": "/weatherstation/:path*", "destination": "/api/handler.js?:path*" },
-    { "source": "/api/:path*", "destination": "/api/:path*" },
     { "source": "/(.*)", "destination": "/public/$1" }
   ]
 }
