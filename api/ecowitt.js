@@ -1,27 +1,42 @@
-let latestData = null;
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '10mb',
+    },
+  },
+};
+
+global.weatherData = null;
 
 export default function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Content-Type', 'text/plain');
   
-  console.log('📡 Ecowitt request received');
+  console.log('🔥 REQUEST RECEIVED');
   console.log('Method:', req.method);
+  console.log('Headers:', JSON.stringify(req.headers));
+  console.log('URL:', req.url);
+  console.log('Query:', JSON.stringify(req.query));
   console.log('Body:', JSON.stringify(req.body));
+  console.log('Raw Body:', req.body);
   
-  if (req.method === 'POST') {
-    global.weatherData = {
-      timestamp: new Date().toISOString(),
-      body: req.body,
-      tempf: req.body.tempf,
-      humidity: req.body.humidity
-    };
+  // Handle BOTH POST and GET
+  if (req.method === 'POST' || req.method === 'GET') {
+    const data = req.method === 'POST' ? req.body : req.query;
     
-    console.log('✅ Data stored:', global.weatherData);
-    return res.status(200).send('success');
-  }
-  
-  if (req.method === 'GET') {
-    return res.status(200).json(global.weatherData || { message: 'No data yet' });
+    if (data && Object.keys(data).length > 0) {
+      global.weatherData = {
+        timestamp: new Date().toISOString(),
+        method: req.method,
+        data: data
+      };
+      
+      console.log('✅ DATA RECEIVED AND STORED:', global.weatherData);
+      return res.status(200).send('success');
+    } else {
+      console.log('⚠️ Empty data');
+      return res.status(200).send('success');
+    }
   }
   
   return res.status(405).send('Not allowed');
